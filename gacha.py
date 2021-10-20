@@ -50,6 +50,6 @@ def arknights_gacha(roll_count):
 
 		print(f'Roll number {idx + 1}: {choice} \t - Pity count: {pity_count}')
 
-if __name__ == "__main__"
+if __name__ == "__main__":
         rolls = int(sys.argv[0])
         arknights_gacha(rolls)
