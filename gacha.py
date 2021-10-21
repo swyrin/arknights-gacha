@@ -1,20 +1,32 @@
+import json
 import random
 import sys
+
 from pool import *
 
 rates = [0.02, 0.08, 0.5, 0.4]
 
-# Rate-up
-six_stars_up = 0.5
-five_stars_up = 0.5
-# TODO: Implement debut banner type
-four_stars_up = 0.0
+
+def load_banner(banner_id: str):
+    j = {}
+
+    with open("banner.json", "r") as f:
+        j = json.loads(f.read())
+
+    banner_data = j[banner_id]
+    # name, type, rate-up pool, rate-up rates
+    return banner_data['name'], banner_data['type'], banner_data['rate_up']['rates'], banner_data['rate_up']['pool']
 
 
-def arknights_gacha(roll_count, sr_pity_hit, pity_count):
+def arknights_gacha(banner_id, roll_count):
     global rates
 
     results = []
+
+    sr_pity_hit = False
+    pity_count = 0
+
+    _, _, rate_up_rates, rate_up_pool = load_banner(banner_id)
 
     # Name
     six_stars_name = '6*'
@@ -23,6 +35,7 @@ def arknights_gacha(roll_count, sr_pity_hit, pity_count):
     three_stars_name = '3*'
 
     names = [six_stars_name, five_stars_name, four_stars_name, three_stars_name]
+    overall_pool = [six_stars_pool, five_stars_pool, four_stars_pool, three_stars_pool]
 
     choices = random.choices(names, weights=rates, k=roll_count)
 
@@ -69,26 +82,23 @@ def arknights_gacha(roll_count, sr_pity_hit, pity_count):
             pity_count += 1
 
         is_rate_up = False
-        # Rate-up processing
-        if choice == six_stars_name:
-            up_rate = [six_stars_up, 1 - six_stars_up]
-            up_name = [six_rate_up_pool, list(set(six_stars_pool) - set(six_rate_up_pool))]
-            pick = random.choices(up_name, up_rate, k=1)[0]
-            if pick == six_rate_up_pool:
-                is_rate_up = True
-            choice = random.choice(pick)
-        elif choice == five_stars_name:
-            up_rate = [five_stars_up, 1 - five_stars_up]
-            up_name = [five_rate_up_pool, list(set(five_stars_pool) - set(five_rate_up_pool))]
-            pick = random.choices(up_name, up_rate, k=1)[0]
-            if pick == five_rate_up_pool:
-                is_rate_up = True
-            choice = random.choice(pick)
-        elif choice == four_stars_name:
-            # TODO: Rate-up
-            choice = random.choice(four_stars_pool)
-        elif choice == three_stars_name:
-            choice = random.choice(three_stars_pool)
+
+        for index, name in enumerate(names):
+            if choice == three_stars_name:
+                choice = random.choice(overall_pool[2])
+                break
+            elif choice == name:
+                up_rates = rate_up_rates[index]
+                prob = [up_rates, 1 - up_rates]
+
+                pool = rate_up_pool[index]
+
+                up_names = [pool, list(set(overall_pool[index]) - set(pool))]
+                res = random.choices(up_names, prob, k=1)[0]
+                choice = random.choice(res)
+
+                if choice in up_names[0]:
+                    is_rate_up = True
 
         if is_rate_up:
             choice += " (RATE UP)"
@@ -116,4 +126,4 @@ def arknights_gacha(roll_count, sr_pity_hit, pity_count):
 
 if __name__ == "__main__":
     rolls = int(sys.argv[1])
-    arknights_gacha(rolls, False, 0)
+    arknights_gacha("surtr-debut", rolls)
