@@ -30,7 +30,7 @@ General zone
 /docs
 /rates
 /operators
-/all-banners-id
+/ids
 """
 
 
@@ -54,8 +54,8 @@ def get_gacha_pool():
     }
 
 
-@app.get("/all-banners-id")
-def get_all_banners_id():
+@app.get("/ids")
+def get_ids_of_all_banners():
     obj = read_banner_file()
     return {
         "ids": list(obj.keys())
