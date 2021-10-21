@@ -44,9 +44,9 @@ def arknights_gacha(banner_id, roll_count):
         raise HTTPException(404, "banner_id not found.")
 
     # Name
-    six_stars_name = '6*'
-    five_stars_name = '5*'
-    four_stars_name = '4*'
+    six_stars_name   = '6*'
+    five_stars_name  = '5*'
+    four_stars_name  = '4*'
     three_stars_name = '3*'
 
     names = [six_stars_name, five_stars_name, four_stars_name, three_stars_name]
@@ -95,6 +95,7 @@ def arknights_gacha(banner_id, roll_count):
             pity_count = 0
         else:
             pity_count += 1
+
 
         is_rate_up = False
         is_limited_rate_up = False
