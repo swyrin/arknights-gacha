@@ -1,20 +1,47 @@
+import json
 import random
 import sys
+
 from pool import *
+
+from fastapi import HTTPException
 
 rates = [0.02, 0.08, 0.5, 0.4]
 
-# Rate-up
-six_stars_up = 0.5
-five_stars_up = 0.5
-# TODO: Implement debut banner type
-four_stars_up = 0.0
+
+def read_banner_file():
+    j = {}
+
+    with open("banner.json", "r") as f:
+        j = json.loads(f.read())
+
+    return j
 
 
-def arknights_gacha(roll_count, sr_pity_hit, pity_count):
+def load_banner(banner_id: str):
+    j = read_banner_file()
+
+    if banner_id in j:
+        banner_data = j[banner_id]
+
+        # name, type, rate-up
+        return banner_data['name'], banner_data['type'], banner_data['rate_up']
+    else:
+        return ()
+
+
+def arknights_gacha(banner_id, roll_count):
     global rates
 
     results = []
+
+    sr_pity_hit = False
+    pity_count = 0
+
+    try:
+        _, type, rate_up = load_banner(banner_id)
+    except:
+        raise HTTPException(404, "banner_id not found.")
 
     # Name
     six_stars_name = '6*'
@@ -23,6 +50,7 @@ def arknights_gacha(roll_count, sr_pity_hit, pity_count):
     three_stars_name = '3*'
 
     names = [six_stars_name, five_stars_name, four_stars_name, three_stars_name]
+    overall_pool = [six_stars_pool, five_stars_pool, four_stars_pool, three_stars_pool]
 
     choices = random.choices(names, weights=rates, k=roll_count)
 
@@ -69,42 +97,70 @@ def arknights_gacha(roll_count, sr_pity_hit, pity_count):
             pity_count += 1
 
         is_rate_up = False
-        # Rate-up processing
-        if choice == six_stars_name:
-            up_rate = [six_stars_up, 1 - six_stars_up]
-            up_name = [six_rate_up_pool, list(set(six_stars_pool) - set(six_rate_up_pool))]
-            pick = random.choices(up_name, up_rate, k=1)[0]
-            if pick == six_rate_up_pool:
-                is_rate_up = True
-            choice = random.choice(pick)
-        elif choice == five_stars_name:
-            up_rate = [five_stars_up, 1 - five_stars_up]
-            up_name = [five_rate_up_pool, list(set(five_stars_pool) - set(five_rate_up_pool))]
-            pick = random.choices(up_name, up_rate, k=1)[0]
-            if pick == five_rate_up_pool:
-                is_rate_up = True
-            choice = random.choice(pick)
-        elif choice == four_stars_name:
-            # TODO: Rate-up
-            choice = random.choice(four_stars_pool)
-        elif choice == three_stars_name:
-            choice = random.choice(three_stars_pool)
+        is_limited_rate_up = False
+        is_limited_comeback_rate_up = False
+
+        for index, name in enumerate(names):
+            up_names = []
+            prob = []
+
+            if choice == six_stars_name and type == 3:
+                up_names = [rate_up['pool'][0], rate_up['limited_comeback'], six_stars_pool]
+                prob = [0.64, 0.3, 0.06]
+
+                res = random.choices(up_names, prob, k=1)[0]
+                choice = random.choice(res)
+
+                if (choice in up_names[0]) or (choice in up_names[1]):
+                    is_rate_up = True
+
+                    if choice[0] == "*":
+                        is_limited_rate_up = True
+                    if choice in up_names[1]:
+                        is_limited_comeback_rate_up = True
+
+            if choice == three_stars_name:
+                choice = random.choice(overall_pool[2])
+                break
+            elif choice == name:
+                up_rates = rate_up['rates'][index]
+                pool = rate_up['pool'][index]
+
+                up_names = [pool, list(set(overall_pool[index]) - set(pool))]
+                prob = [up_rates, 1 - up_rates]
+
+                res = random.choices(up_names, prob, k=1)[0]
+                choice = random.choice(res)
+
+                if choice in up_names[0]:
+                    is_rate_up = True
+
+        fake_choice = choice
 
         if is_rate_up:
-            choice += " (RATE UP)"
+            fake_choice += " (RATE UP)"
+        elif is_limited_rate_up:
+            if is_limited_comeback_rate_up:
+                fake_choice += " (LIMITED - COMEBACK)"
+            else:
+                fake_choice += " (LIMITTED)"
 
         if __name__ == "__main__":
-            print(f'Roll number {idx + 1}: {choice} \t\t\t\t - Pity count: {pity_count} \t')
+            print(f"Roll number {idx + 1}: {fake_choice}     \t\t\t\t - Pity count: {pity_count}")
         else:
             results.append(
                 {
                     "roll_number": idx + 1,
-                    "result": choice.replace(" (RATE UP)", ""),
-                    "is_rate_up": is_rate_up,
+                    "result": choice,
+                    "rate_up": is_rate_up,
+                    "limited": {
+                        "is_limited": is_limited_rate_up,
+                        "is_comeback": is_limited_comeback_rate_up
+                    },
                     "pity": {
-                        "pity_count": pity_count,
                         "is_pity": is_pity,
-                        "pity_type": pity_type
+                        "pity_type": pity_type,
+                        "pity_count": pity_count
                     }
                 }
             )
@@ -115,5 +171,6 @@ def arknights_gacha(roll_count, sr_pity_hit, pity_count):
 
 
 if __name__ == "__main__":
-    rolls = int(sys.argv[1])
-    arknights_gacha(rolls, False, 0)
+    banner_id = sys.argv[1]
+    rolls = int(sys.argv[2])
+    arknights_gacha(banner_id, rolls)

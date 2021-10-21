@@ -1,5 +1,3 @@
-# Operators pool
-# Put this here for editing convenience
 six_stars_pool = ["Aak", "Angelina", "Archetto", "Bappipe", "Blaze",
                     "Blemishine", "Ceobe", "Ch'en", "Eunectes", "Exusiai",
                     "Eyjafjalla", "Hellagur", "Hoshiguma", "Ifrit", "Magallan",
@@ -32,7 +30,3 @@ three_stars_pool = ["Adnachiel", "Ansel", "Beagle", "Beehunter", "Cardigan",
                     "Catapult", "Fang", "Hibiscus", "Kroos", "Lava",
                     "Melantha", "Midnight", "Orchid", "Plume", "Popukar",
                     "Spot", "Steward", "Vanilla"]
-
-six_rate_up_pool = ["SilverAsh", "Mountain"]
-five_rate_up_pool = ["Lappland", "Tsukinogi", "Cliffheart"]
-four_rate_up_pool = []

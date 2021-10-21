@@ -1,5 +1,4 @@
-import json
-from typing import Optional, Any
+from typing import Any
 
 import uvicorn
 from fastapi import FastAPI
@@ -24,18 +23,25 @@ class PrettyJSONResponse(Response):
         ).encode("utf-8")
 
 
+"""
+General zone
+
+/
+/docs
+/rates
+/operator
+/all-banners-id
+"""
+
+
 @app.get("/")
 def index_page():
-    return "Hi"
+    return "Hello world!"
 
 
-# General zone
-# /rates
-# /operator
-# /roll
 @app.get("/rates")
 def get_gacha_rates():
-    return [0.02, 0.08, 0.5, 0.4]
+    return rates
 
 
 @app.get("/operators", response_class=PrettyJSONResponse)
@@ -48,29 +54,62 @@ def get_gacha_pool():
     }
 
 
-@app.get("/roll", response_class=PrettyJSONResponse)
-def roll(roll_count: int, sr_pity_hit: Optional[bool] = False, pity_count: Optional[int] = 0):
-    return arknights_gacha(roll_count, sr_pity_hit, pity_count)
-
-
-# Rate-up zone
-# /rate-up/operators
-# /rate-up/rates
-@app.get("/rate-up/operators", response_class=PrettyJSONResponse)
-def get_rate_up_operators():
+@app.get("/all-banners-id")
+def get_all_banners_id():
+    obj = read_banner_file()
     return {
-        "six_stars": six_rate_up_pool,
-        "five_stars": five_rate_up_pool,
-        "four_stars": four_rate_up_pool
+        "ids": list(obj.keys())
     }
 
 
-@app.get("/rate-up/rates", response_class=PrettyJSONResponse)
-def get_rate_up_rates():
+"""
+Banner-specific zone
+
+/{banner-id}
+/{banner-id}/roll?count=[number]
+/{banner-id}/operators
+/{banner-id}/rates
+"""
+
+
+@app.get("/{banner_id}", response_class=PrettyJSONResponse)
+def banner_info(banner_id: str):
+    name, type, rates, pool = load_banner(banner_id)
+    banner_type = ["Standard", "Debut", "Limited", "Limited-Comeback"]
+
     return {
-        "six_stars": six_stars_up,
-        "five_stars": five_stars_up,
-        "four_stars": four_stars_up
+        "name": name,
+        "type": banner_type[type],
+        "rate_up": {
+            "rates": rates,
+            "pool": pool
+        }
+    }
+
+
+@app.get("/{banner_id}/roll", response_class=PrettyJSONResponse)
+def roll(banner_id: str, count: int):
+    return arknights_gacha(banner_id, count)
+
+
+@app.get("/{banner_id}/operators", response_class=PrettyJSONResponse)
+def get_rate_up_operators(banner_id: str):
+    _, _, _, pool = load_banner(banner_id)
+
+    return {
+        "six_stars": pool[0],
+        "five_stars": pool[1],
+        "four_stars": pool[2]
+    }
+
+
+@app.get("/{banner_id}/rates", response_class=PrettyJSONResponse)
+def get_rate_up_rates(banner_id: str):
+    _, _, rates, _ = load_banner(banner_id)
+    return {
+        "six_stars": rates[0],
+        "five_stars": rates[1],
+        "four_stars": rates[2]
     }
 
 
