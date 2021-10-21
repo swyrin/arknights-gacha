@@ -2,15 +2,19 @@ import random
 import sys
 from pool import *
 
+rates = [0.02, 0.08, 0.5, 0.4]
 
-"""
-How this works:
-1. 5* or higher is guaranteed in the first ten rolls
-2. If the first 50 rolls doesn't give you a 6*, then starting from 51th roll, the 6* rate will go up by 2%
-"""
+# Rate-up
+six_stars_up = 0.5
+five_stars_up = 0.5
+# TODO: Implement debut banner type
+four_stars_up = 0.0
 
-def arknights_gacha(roll_count):
-    rates = [0.02, 0.08, 0.5, 0.4]
+
+def arknights_gacha(roll_count, sr_pity_hit, pity_count):
+    global rates
+
+    results = []
 
     # Name
     six_stars_name = '6*'
@@ -18,27 +22,29 @@ def arknights_gacha(roll_count):
     four_stars_name = '4*'
     three_stars_name = '3*'
 
-    # Rate-up
-    six_stars_up = 0.5
-    five_stars_up = 0.5
-
-    # TODO: Implement debut banner type
-    # four_stars_up = 0.4
-
     names = [six_stars_name, five_stars_name, four_stars_name, three_stars_name]
 
-    sr_pity_hit = False
-    pity_count = 0
     choices = random.choices(names, weights=rates, k=roll_count)
 
     for idx, choice in enumerate(choices):
         temp_rates = rates.copy()
+
+        is_pity = False
+        pity_type = "None"
+
         # guarantee 6*/5* in first ten rolls
         if idx + 1 <= 10:
             if (choice == six_stars_name or choice == five_stars_name) and not sr_pity_hit:
                 sr_pity_hit = True
+                is_pity = True
+                pity_type = "First Ten Guarantee"
             if idx + 1 == 10 and not sr_pity_hit:
+                # If nine previous rolls don't give you SSR or higher
+                # then 10th roll will give it forcefully
+                choice = random.choices([six_stars_name, five_stars_name], weights=[0.02, 0.98], k=1)[0]
                 sr_pity_hit = True
+                is_pity = True
+                pity_type = "First Ten Guarantee"
         else:
             if pity_count >= 50:
                 rates[0] += (pity_count - 50) * 0.02
@@ -54,40 +60,60 @@ def arknights_gacha(roll_count):
                 rates[max_index] -= 0.02
                 choice = random.choices(names, weights=rates, k=1)[0]
 
-
         if choice == six_stars_name:
+            if pity_count >= 50:
+                is_pity = True
+                pity_type = "50-th Roll Pity"
             pity_count = 0
         else:
             pity_count += 1
 
-        isRateUp = False
+        is_rate_up = False
         # Rate-up processing
         if choice == six_stars_name:
-                up_rate = [six_stars_up, 1 - six_stars_up]
-                up_name = [six_rate_up_pool, list(set(six_stars_pool) - set(six_rate_up_pool))]
-                pick = random.choices(up_name, up_rate, k=1)[0]
-                if pick == six_rate_up_pool:
-                        isRateUp = True
-                choice = random.choice(pick)
+            up_rate = [six_stars_up, 1 - six_stars_up]
+            up_name = [six_rate_up_pool, list(set(six_stars_pool) - set(six_rate_up_pool))]
+            pick = random.choices(up_name, up_rate, k=1)[0]
+            if pick == six_rate_up_pool:
+                is_rate_up = True
+            choice = random.choice(pick)
         elif choice == five_stars_name:
-                up_rate = [five_stars_up, 1 - five_stars_up]
-                up_name = [five_rate_up_pool, list(set(five_stars_pool) - set(five_rate_up_pool))]
-                pick = random.choices(up_name, up_rate, k=1)[0]
-                if pick == five_rate_up_pool:
-                        isRateUp = True
-                choice = random.choice(pick)
+            up_rate = [five_stars_up, 1 - five_stars_up]
+            up_name = [five_rate_up_pool, list(set(five_stars_pool) - set(five_rate_up_pool))]
+            pick = random.choices(up_name, up_rate, k=1)[0]
+            if pick == five_rate_up_pool:
+                is_rate_up = True
+            choice = random.choice(pick)
         elif choice == four_stars_name:
-                # To-do: Rate-up
-                choice = random.choice(four_stars_pool)
+            # TODO: Rate-up
+            choice = random.choice(four_stars_pool)
         elif choice == three_stars_name:
-                choice = random.choice(three_stars_pool)
+            choice = random.choice(three_stars_pool)
 
-        if isRateUp:
-                choice += " (RATE UP)"
-            
-        print(f'Roll number {idx + 1}: {choice} \t\t\t\t - Pity count: {pity_count} \t')
+        if is_rate_up:
+            choice += " (RATE UP)"
+
+        if __name__ == "__main__":
+            print(f'Roll number {idx + 1}: {choice} \t\t\t\t - Pity count: {pity_count} \t')
+        else:
+            results.append(
+                {
+                    "roll_number": idx + 1,
+                    "result": choice.replace(" (RATE UP)", ""),
+                    "is_rate_up": is_rate_up,
+                    "pity": {
+                        "pity_count": pity_count,
+                        "is_pity": is_pity,
+                        "pity_type": pity_type
+                    }
+                }
+            )
+
         rates = temp_rates.copy()
 
+    return results
+
+
 if __name__ == "__main__":
-        # rolls = int(sys.argv[0])
-        arknights_gacha(300)
+    rolls = int(sys.argv[1])
+    arknights_gacha(rolls, False, 0)
