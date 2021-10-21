@@ -1,5 +1,5 @@
 # Operators pool
-# Put this here for editting convenience
+# Put this here for editing convenience
 six_stars_pool = ["Aak", "Angelina", "Archetto", "Bappipe", "Blaze",
                     "Blemishine", "Ceobe", "Ch'en", "Eunectes", "Exusiai",
                     "Eyjafjalla", "Hellagur", "Hoshiguma", "Ifrit", "Magallan",
@@ -24,7 +24,7 @@ four_stars_pool = ["Aciddrop", "Ambriel", "April", "Arene", "Beanstalk",
                 "Dobermann", "Flint", "Frostleaf", "Gitano", "Gravel",
                 "Greyy", "Gummy", "Haze", "Jackie", "Jaye",
                 "Jessica", "Leizi", "Matoimaru", "Matterhorn", "May",
-                "Meteor", "Mouse", "Myrrh", "Myrtle", "Perfumer",
+                "Meteor", "Mousse", "Myrrh", "Myrtle", "Perfumer",
                 "Pinecone", "Podenco", "Rope", "Scavenger", "Shaw",
                 "Shirayuki", "Sussuro", "Utage", "Vermeil", "Vigna"]
 
@@ -35,3 +35,4 @@ three_stars_pool = ["Adnachiel", "Ansel", "Beagle", "Beehunter", "Cardigan",
 
 six_rate_up_pool = ["SilverAsh", "Mountain"]
 five_rate_up_pool = ["Lappland", "Tsukinogi", "Cliffheart"]
+four_rate_up_pool = []
