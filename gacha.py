@@ -41,18 +41,18 @@ def arknights_gacha(roll_count):
                 sr_pity_hit = True
         else:
             if pity_count >= 50:
-                temp_rates[0] += (pity_count - 50) * 0.02
+                rates[0] += (pity_count - 50) * 0.02
                 max_index = 0
 
-                if temp_rates[1] > temp_rates[2] > temp_rates[3]:
+                if rates[1] > rates[2] > rates[3]:
                     max_index = 1
-                elif temp_rates[1] < temp_rates[2] and temp_rates[2] > temp_rates[3]:
+                elif rates[1] < rates[2] and rates[2] > rates[3]:
                     max_index = 2
-                elif temp_rates[1] < temp_rates[2] < temp_rates[3]:
+                elif rates[1] < rates[2] < rates[3]:
                     max_index = 3
 
-                temp_rates[max_index] -= 0.02
-                choice = random.choices(names, weights=temp_rates, k=1)[0]
+                rates[max_index] -= 0.02
+                choice = random.choices(names, weights=rates, k=1)[0]
 
 
         if choice == six_stars_name:
