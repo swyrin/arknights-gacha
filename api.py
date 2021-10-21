@@ -29,7 +29,7 @@ General zone
 /
 /docs
 /rates
-/operator
+/operators
 /all-banners-id
 """
 
