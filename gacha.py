@@ -13,13 +13,13 @@ def arknights_gacha(roll_count):
     rates = [0.02, 0.08, 0.5, 0.4]
 
     # Name
-    six_stars_name = '6*'
-    five_stars_name = '5*'
-    four_stars_name = '4*'
+    six_stars_name   = '6*'
+    five_stars_name  = '5*'
+    four_stars_name  = '4*'
     three_stars_name = '3*'
 
     # Rate-up
-    six_stars_up = 0.5
+    six_stars_up  = 0.5
     five_stars_up = 0.5
 
     # TODO: Implement debut banner type
@@ -85,9 +85,8 @@ def arknights_gacha(roll_count):
         if isRateUp:
                 choice += " (RATE UP)"
             
-        print(f'Roll number {idx + 1}: {choice} \t\t\t\t - Pity count: {pity_count} \t')
-        rates = temp_rates.copy()
+        print(f'Roll number {idx + 1}: {choice}    \t\t\t\t - Pity count: {pity_count}')
 
 if __name__ == "__main__":
-        # rolls = int(sys.argv[0])
-        arknights_gacha(300)
+        rolls = int(sys.argv[1])
+        arknights_gacha(rolls)
