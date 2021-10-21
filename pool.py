@@ -1,14 +1,14 @@
 # Operators pool
 # Put this here for editting convenience
-six_stars_pool = ["Kal'tsit", "Aak", "Angelina", "Archetto", "Bappipe", "Blaze",
+six_stars_pool = ["Aak", "Angelina", "Archetto", "Bappipe", "Blaze",
                     "Blemishine", "Ceobe", "Ch'en", "Eunectes", "Exusiai",
-                    "Eyjafjalla", "Hellagur", "Hoshiguma", "Ifrit", "Magallan",
-                    "Mostima", "Mountain", "Mudrock", "Nightingale", "Passenger",
-                    "Rosa", "Saga", "Saria", "Schwarz", "Shining",
+                    "Eyjafjalla", "Hellagur", "Hoshiguma", "Ifrit", "Kal'tsit",
+                    "Magallan", "Mostima", "Mountain", "Mudrock", "Nightingale",
+                    "Passenger", "Rosa", "Saga", "Saria", "Schwarz", "Shining",
                     "Siege", "SilverAsh", "Skadi", "Surtr", "Suzuran",
                     "Thorns", "Weedy"]
 
-five_stars_pool = ["Akafuyu", "Andreana", "Aosta", "Asbestos", "Astesia", "Ayerscarpe",
+five_stars_pool = ["Andreana", "Akafuyu", "Aosta", "Asbestos", "Astesia", "Ayerscarpe",
                     "Beeswax", "Blue Poison", "Broca", "Chiave", "Cliffheart",
                     "Croissant", "Executor", "FEater", "Firewatch", "Franka",
                     "Glaucus", "Greythroat", "Hung", "Iris", "Istina",
@@ -33,5 +33,5 @@ three_stars_pool = ["Adnachiel", "Ansel", "Beagle", "Beehunter", "Cardigan",
                     "Melantha", "Midnight", "Orchid", "Plume", "Popukar",
                     "Spot", "Steward", "Vanilla"]
 
-six_rate_up_pool = ["Kal'tsit", "SilverAsh", "Mountain"]
-five_rate_up_pool = ["Akafuyu", "Lappland", "Tsukinogi", "Cliffheart"]
+six_rate_up_pool = ["SilverAsh", "Mountain"]
+five_rate_up_pool = ["Lappland", "Tsukinogi", "Cliffheart"]
