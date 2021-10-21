@@ -119,6 +119,8 @@ def arknights_gacha(banner_id, roll_count):
                     if choice in up_names[1]:
                         is_limited_comeback_rate_up = True
 
+                    choice = choice.replace("*", "")
+
             if choice == three_stars_name:
                 choice = random.choice(overall_pool[2])
                 break
