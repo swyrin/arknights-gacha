@@ -1,0 +1,21 @@
+{
+  "standard": {
+    "type": 0,
+    "name": "Standard Banner",
+    "rate_up": {
+      "limited_comebacks": [],
+      "rates": [0.5, 0.5, 0, 0],
+      "operators": [["Aak", "Eunectes"], ["Kafka", "Reed", "Beeswax"], []]
+    }
+  },
+
+  "deep-drown-lament": {
+    "type": 3,
+    "name": "Deep Drown Lament",
+    "rate_up": {
+      "limited_comebacks": ["*W"],
+      "rates": [0.7, 0.5, 0, 0],
+      "operators": [["*Skadi the Corrupting Heart", "Kal'tsit"], ["Akafuyu"], []]
+    }
+  }
+}
