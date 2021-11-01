@@ -12,6 +12,7 @@ Helps are welcome! :tada:
 
 # How to use
 1. API way
+
 The API implementation for this repo is hosted on [`https://api.swyrin.me/arknights`](https://api.swyrin.me/arknights)
 
 | Endpoints                           | Description                                            | Note| 
@@ -42,5 +43,9 @@ example: gacha.py deep-drown-lament 300
     - [x] 5* rate ups
     - [x] 4* rate ups
 - [x] More banner types support
+  - [x] Standard banner
+  - [x] Debut operator banner
+  - [x] Limited operator banner
+    - [x] With comback operator(s)
 - [ ] Better code quality
 - [ ] Extending to customizable gacha?
