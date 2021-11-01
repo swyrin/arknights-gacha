@@ -5,13 +5,14 @@ Current supported banner types (with potential bugs):
   - Standard banner
   - Debut banner
   - Limited banner
-  - Limited banner with comeback operator (e.g. `Nian - Hidden Moon`, `W - Deep Drown Lament`)
-  - Joint Operation
+  - Limited banner with comeback operator(s) (e.g. `Nian - Hidden Moon`, `W - Deep Drown Lament`)
+  - Joint Operation banner
 
 Helps are welcome! :tada:
 
 # How to use
-1. API way
+## 1. API way
+
 The API implementation for this repo is hosted on [`https://api.swyrin.me/arknights`](https://api.swyrin.me/arknights)
 
 | Endpoints                           | Description                                            | Note| 
@@ -27,10 +28,11 @@ The API implementation for this repo is hosted on [`https://api.swyrin.me/arknig
 | `banners/{banner_id}/operators`            | Check banner's rate-up operators                       |
 
  
-2. Normal way
+## 2. Normal way
+
 If you are lazy to install the entire Python just to run this, you can use the `Embeddeable Package` installation of Python.
 ```
-gacha.py [banner_id] [roll count]
+gacha.py [banner_id] [roll_count]
 example: gacha.py deep-drown-lament 300
 ```
 
@@ -42,5 +44,9 @@ example: gacha.py deep-drown-lament 300
     - [x] 5* rate ups
     - [x] 4* rate ups
 - [x] More banner types support
+  - [x] Standard banner
+  - [x] Debut operator banner
+  - [x] Limited operator banner
+    - [x] With comback operator(s)
 - [ ] Better code quality
 - [ ] Extending to customizable gacha?
