@@ -5,12 +5,13 @@ import sys
 from pool import *
 
 rates = [0.02, 0.08, 0.5, 0.4]
+banners_file = "banners.json"
 
 
 def read_banner_file():
     j = {}
 
-    with open("banner.json", "r") as f:
+    with open(banners_file, "r") as f:
         j = json.loads(f.read())
 
     return j
@@ -28,7 +29,7 @@ def load_banner(banner_id: str):
         return ()
 
 
-def arknights_gacha(banner_id, roll_count):
+def gacha(banner_id, roll_count):
     global rates
 
     results = []
@@ -39,7 +40,7 @@ def arknights_gacha(banner_id, roll_count):
     try:
         _, type, rate_up = load_banner(banner_id)
     except:
-        raise Exception(404, "banner_id not found.")
+        raise Exception("There was an error loading banners.")
 
     # Name
     six_stars_name   = '6*'
@@ -104,7 +105,7 @@ def arknights_gacha(banner_id, roll_count):
             prob = []
 
             if choice == six_stars_name and type == 3:
-                up_names = [rate_up['pool'][0], rate_up['limited_comeback'], six_stars_pool]
+                up_names = [rate_up['operators'][0], rate_up['limited_comebacks'], six_stars_pool]
                 prob = [0.64, 0.3, 0.06]
 
                 res = random.choices(up_names, prob, k=1)[0]
@@ -125,7 +126,7 @@ def arknights_gacha(banner_id, roll_count):
                 break
             elif choice == name:
                 up_rates = rate_up['rates'][index]
-                pool = rate_up['pool'][index]
+                pool = rate_up['operators'][index]
 
                 up_names = [pool, list(set(overall_pool[index]) - set(pool))]
                 prob = [up_rates, 1 - up_rates]
@@ -136,36 +137,15 @@ def arknights_gacha(banner_id, roll_count):
                 if choice in up_names[0]:
                     is_rate_up = True
 
-        fake_choice = choice
-
         if is_rate_up:
-            fake_choice += " (RATE UP)"
+            choice += " (RATE UP)"
         elif is_limited_rate_up:
             if is_limited_comeback_rate_up:
-                fake_choice += " (LIMITED - COMEBACK)"
+                choice += " (LIMITED - COMEBACK)"
             else:
-                fake_choice += " (LIMITTED)"
+                choice += " (LIMITTED)"
 
-        if __name__ == "__main__":
-            print(f"Roll number {idx + 1}: {fake_choice}     \t\t\t\t - Pity count: {pity_count}")
-        else:
-            results.append(
-                {
-                    "roll_number": idx + 1,
-                    "result": choice,
-                    "rate_up": is_rate_up,
-                    "limited": {
-                        "is_limited": is_limited_rate_up,
-                        "is_comeback": is_limited_comeback_rate_up
-                    },
-                    "pity": {
-                        "is_pity": is_pity,
-                        "pity_type": pity_type,
-                        "pity_count": pity_count
-                    }
-                }
-            )
-
+        print(f"Roll #{idx + 1}: {choice} - Pity: {pity_count}")
         rates = temp_rates.copy()
 
     return results
@@ -173,5 +153,6 @@ def arknights_gacha(banner_id, roll_count):
 
 if __name__ == "__main__":
     banner_id = sys.argv[1]
+    print(banner_id)
     rolls = int(sys.argv[2])
-    arknights_gacha(banner_id, rolls)
+    gacha(banner_id, rolls)
