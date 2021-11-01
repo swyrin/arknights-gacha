@@ -153,6 +153,5 @@ def gacha(banner_id, roll_count):
 
 if __name__ == "__main__":
     banner_id = sys.argv[1]
-    print(banner_id)
     rolls = int(sys.argv[2])
     gacha(banner_id, rolls)

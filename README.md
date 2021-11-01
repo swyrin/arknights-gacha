@@ -11,7 +11,7 @@ Current supported banner types (with potential bugs):
 Helps are welcome! :tada:
 
 # How to use
-## 1. API way
+1. API way
 
 The API implementation for this repo is hosted on [`https://api.swyrin.me/arknights`](https://api.swyrin.me/arknights)
 
@@ -28,7 +28,7 @@ The API implementation for this repo is hosted on [`https://api.swyrin.me/arknig
 | `banners/{banner_id}/operators`            | Check banner's rate-up operators                       |
 
  
-## 2. Normal way
+2. Normal way
 
 If you are lazy to install the entire Python just to run this, you can use the `Embeddeable Package` installation of Python.
 ```
