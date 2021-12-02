@@ -1,0 +1,11 @@
+{
+  "standard": {
+    "type": 0,
+    "name": "Standard Banner",
+    "rate_up": {
+      "limited_comebacks": [],
+      "rates": [0.5, 0.5, 0, 0],
+      "operators": [["Nightingale", "Hellagur"], ["Istina", "Warfarin", "Asbestos"], []]
+    }
+  }
+}
